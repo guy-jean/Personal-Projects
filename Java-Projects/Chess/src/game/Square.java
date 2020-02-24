@@ -13,6 +13,11 @@ public class Square {
 		this.piece = piece;
 	}
 	
+	public Square(Square sq) {
+		this.type = sq.getType();
+		this.piece = sq.getPiece().duplicate();
+	}
+	
 	public SquareType getType() {
 		return type;
 	}

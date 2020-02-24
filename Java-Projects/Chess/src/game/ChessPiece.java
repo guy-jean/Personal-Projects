@@ -7,28 +7,31 @@ public abstract class ChessPiece {
 	
 	private int file;
 	private int rank;
+	private int moveCount;
 	private ChessPieceColor color;
-	private ChessBoard chessBoard;
+
 	
-	public ChessPiece(int file, int rank, ChessPieceColor color, ChessBoard chessBoard) {
+	public ChessPiece(int file, int rank, ChessPieceColor color) {
 		this.file = file;
 		this.rank = rank;
 		this.color = color;
-		this.chessBoard = chessBoard;
+		this.moveCount = 0;
 	}
 	
-	public boolean move(int targetFile, int targetRank) {
-		if (validMove(targetFile, targetRank)) {
-			capture(targetFile, targetRank);
+	
+	public boolean move(int targetFile, int targetRank, ChessBoard chessBoard) {
+		if (validMove(targetFile, targetRank, chessBoard)) {
+			capture(targetFile, targetRank, chessBoard);
+			this.moveCount++;
 			return true;
 		}
 		
 		return false;
 	}
 	
-	public ChessPiece capture(int targetFile, int targetRank) {
-		Square currSquare = this.chessBoard.getSquare(this.file, this.rank);
-		Square targetSquare = this.chessBoard.getSquare(targetFile, targetRank);
+	public ChessPiece capture(int targetFile, int targetRank, ChessBoard chessBoard) {
+		Square currSquare = chessBoard.getSquare(this.file, this.rank);
+		Square targetSquare = chessBoard.getSquare(targetFile, targetRank);
 		ChessPiece targetPiece = targetSquare.getPiece();
 		
 		targetSquare.setPiece(this);
@@ -40,28 +43,41 @@ public abstract class ChessPiece {
 		return targetPiece;
 	}
 	
-	public  boolean validMove(int targetFile, int targetRank) {
-		return inBounds(targetFile, targetRank) && inRange(targetFile, targetRank) 
-				&& !occupiedBySameColor(targetFile, targetRank);
+	public  boolean validMove(int targetFile, int targetRank, ChessBoard chessBoard) {
+		return inBounds(targetFile, targetRank, chessBoard) && inRange(targetFile, targetRank) 
+				&& !occupiedBySameColor(targetFile, targetRank, chessBoard);
 	}
 
 	protected abstract boolean inRange(int targetFile, int targetRank);
+	
+	protected abstract ChessPiece duplicate();
 
-	private boolean inBounds(int targetFile, int targetRank) {
-		return targetFile >= 0 && targetFile < this.chessBoard.MAXFILE && 
-				targetRank >= 0 && targetRank < this.chessBoard.MAXRANK;
+	private boolean inBounds(int targetFile, int targetRank, ChessBoard chessBoard) {
+		return targetFile >= 0 && targetFile < chessBoard.MAXFILE && 
+				targetRank >= 0 && targetRank < chessBoard.MAXRANK;
 	}
 	
 
-	private boolean occupiedBySameColor(int targetFile, int targetRank) {
-		Square targetSquare = this.chessBoard.getSquare(targetFile, targetRank);
+	private boolean occupiedBySameColor(int targetFile, int targetRank, ChessBoard chessBoard) {
+		Square targetSquare = chessBoard.getSquare(targetFile, targetRank);
 		ChessPiece targetPiece = targetSquare.getPiece();
 		
-		return targetPiece.getChessPieceColor() != this.getChessPieceColor();
+		return targetPiece.getColor() != this.getColor();
 	}
 
-	public ChessPieceColor getChessPieceColor() {
+	public ChessPieceColor getColor() {
 		return this.color;
 	}
 	
+	public int getMoveCount() {
+		return this.moveCount;
+	}
+	
+	public int getFile() {
+		return this.file;
+	}
+	
+	public int getRank() {
+		return this.rank;
+	}
 }
