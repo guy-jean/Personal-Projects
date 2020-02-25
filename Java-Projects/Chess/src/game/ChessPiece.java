@@ -1,24 +1,40 @@
 package game;
 
-public abstract class ChessPiece {
+import java.util.ArrayList;
+
+public class ChessPiece {
 	public enum ChessPieceColor {
 		WHITE, BLACK
 	}
 	
-	private int file;
-	private int rank;
+	public enum ChessPieceType {
+		PAWN, ROOK, BISHOP, KNIGHT, QUEEN, KING
+	}
+	
+	private ChessPieceType type;
+	private int row;
+	private int col;
 	private int moveCount;
 	private ChessPieceColor color;
 
 	
-	public ChessPiece(int file, int rank, ChessPieceColor color) {
-		this.file = file;
-		this.rank = rank;
+	public ChessPiece(int row, int col, ChessPieceColor color, ChessPieceType type) {
+		this.type = type;
+		this.row = row;
+		this.col = col;
 		this.color = color;
 		this.moveCount = 0;
 	}
 	
+	public ChessPiece(ChessPiece chessPiece) {
+		this.type = chessPiece.getType();
+		this.row = chessPiece.getRow();
+		this.col = chessPiece.getCol();
+		this.color = chessPiece.getColor();
+		this.moveCount = chessPiece.getMoveCount();
+	}
 	
+	/*
 	public boolean move(int targetFile, int targetRank, ChessBoard chessBoard) {
 		if (validMove(targetFile, targetRank, chessBoard)) {
 			capture(targetFile, targetRank, chessBoard);
@@ -44,13 +60,18 @@ public abstract class ChessPiece {
 	}
 	
 	public  boolean validMove(int targetFile, int targetRank, ChessBoard chessBoard) {
-		return inBounds(targetFile, targetRank, chessBoard) && inRange(targetFile, targetRank) 
+		return inBounds(targetFile, targetRank, chessBoard) && inRange(targetFile, targetRank, chessBoard) 
 				&& !occupiedBySameColor(targetFile, targetRank, chessBoard);
 	}
 
-	protected abstract boolean inRange(int targetFile, int targetRank);
+	protected abstract boolean inRange(int targetFile, int targetRank, ChessBoard chessBoard);
+	*/
+	protected ChessPiece duplicate() {
+		return null;
+	}
 	
-	protected abstract ChessPiece duplicate();
+	/*
+	protected abstract ArrayList<int[]> potentialMoves();
 
 	private boolean inBounds(int targetFile, int targetRank, ChessBoard chessBoard) {
 		return targetFile >= 0 && targetFile < chessBoard.MAXFILE && 
@@ -64,7 +85,7 @@ public abstract class ChessPiece {
 		
 		return targetPiece.getColor() != this.getColor();
 	}
-
+	*/
 	public ChessPieceColor getColor() {
 		return this.color;
 	}
@@ -73,11 +94,27 @@ public abstract class ChessPiece {
 		return this.moveCount;
 	}
 	
-	public int getFile() {
-		return this.file;
+	public int getRow() {
+		return this.row;
 	}
 	
-	public int getRank() {
-		return this.rank;
+	public int getCol() {
+		return this.col;
+	}
+	
+	public void setRow(int row) {
+		this.row = row;
+	}
+	
+	public void setCol(int col) {
+		this.col = col;
+	}
+	
+	public void incMove( ) {
+		this.moveCount++;
+	}
+	
+	public ChessPieceType getType() {
+		return this.type;
 	}
 }
