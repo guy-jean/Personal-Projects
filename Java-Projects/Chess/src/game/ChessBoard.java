@@ -8,7 +8,7 @@ public class ChessBoard {
 	static final int MAXFILE = 8; //row
 	static final int MAXRANK = 8; //col
 	public ChessPiece enPassantPawn;
-	
+	public int[] enPassantCoors;
 	public ChessBoard() {
 		board = new ChessPiece[MAXFILE][MAXRANK];
 		
