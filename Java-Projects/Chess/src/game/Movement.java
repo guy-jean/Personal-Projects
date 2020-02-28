@@ -207,6 +207,34 @@ public class Movement {
 	public static ArrayList<int[]> getKnightMoves(ChessBoard chessBoard, ChessPiece chessPiece) {
 		ArrayList<int[]> lst = new ArrayList<int[]>();
 		
+		int row = chessPiece.getRow();
+		int col = chessPiece.getCol();
+		
+		//upperleft
+		lst.add(new int[] {row+1, col-2});
+		lst.add(new int[] {row+2, col-1});
+		
+		//upperright
+		lst.add(new int[] {row+1, col+2});
+		lst.add(new int[] {row+2, col+1});
+		
+		//lowerleft
+		lst.add(new int[] {row-1, col-2});
+		lst.add(new int[] {row-2, col-1});
+		
+		//lowerright
+		lst.add(new int[] {row-1, col+2});
+		lst.add(new int[] {row-2, col+1});
+		
+		for(int i = 0; i < lst.size(); i++) {
+			int[] arr = lst.get(i);
+			if(!inBounds(arr[0],arr[1]))
+				lst.remove(i);
+			else if (chessBoard.getPiece(arr[0], arr[1]) != null && 
+					chessBoard.getPiece(arr[0], arr[1]).getColor() == chessPiece.getColor())
+				lst.remove(i);
+		}
+		
 		return lst;
 	}
 
@@ -219,8 +247,55 @@ public class Movement {
 
 	public static ArrayList<int[]> getKingMoves(ChessBoard chessBoard, ChessPiece chessPiece) {
 		ArrayList<int[]> lst = new ArrayList<int[]>();
+		int row = chessPiece.getRow();
+		int col = chessPiece.getCol();
 		
+		//diags
+		lst.add(new int[] {row+1, col+1});
+		lst.add(new int[] {row+1, col-1});
+		lst.add(new int[] {row-1, col-1});
+		lst.add(new int[] {row-2, col-1});
+		
+		//lats
+		lst.add(new int[] {row+1, col});
+		lst.add(new int[] {row-1, col});
+		lst.add(new int[] {row, col+1});
+		lst.add(new int[] {row, col-1});
+		
+		for(int i = 0; i < lst.size(); i++) {
+			int[] arr = lst.get(i);
+			if(!inBounds(arr[0],arr[1]))
+				lst.remove(i);
+			else if (chessBoard.getPiece(arr[0], arr[1]) != null && 
+					chessBoard.getPiece(arr[0], arr[1]).getColor() == chessPiece.getColor())
+				lst.remove(i);
+		}
+		
+		if (chessPiece.getMoveCount() == 0) {
+			castle(chessBoard, chessPiece, lst);
+		}
+			
+			
 		return lst;
+	}
+	
+	private static void castle(ChessBoard chessBoard, ChessPiece chessPiece, ArrayList<int[]> lst) {
+		ChessPieceColor color = chessPiece.getColor();
+		int row = chessPiece.getRow();
+		for (int c = 1; c < ChessBoard.MAXRANK-2; c++) {
+			ChessPiece tempPiece = chessBoard.getPiece(row, c); 
+			if (tempPiece != chessPiece || chessBoard.squareAttacked(row, c, color))
+				return;
+		}
+		
+		ChessPiece leftCorner = chessBoard.getPiece(row, 0);
+		ChessPiece rightCorner = chessBoard.getPiece(row, ChessBoard.MAXRANK-1);
+		
+		if (leftCorner != null && leftCorner.getType() == ChessPieceType.ROOK && leftCorner.getMoveCount() == 0)
+			lst.add(new int[]{row,chessPiece.getCol()-2});
+		
+		if (rightCorner != null && rightCorner.getType() == ChessPieceType.ROOK && rightCorner.getMoveCount() == 0)
+			lst.add(new int[]{row,chessPiece.getCol()+2});
 	}
 	
 	private static boolean inBounds(int row, int col) {

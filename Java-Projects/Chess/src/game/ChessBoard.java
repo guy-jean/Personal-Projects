@@ -45,12 +45,15 @@ public class ChessBoard {
 	
 	public boolean inCheck(ChessPieceColor color) {
 		ChessPiece king = findKing(color);
-		
+		return squareAttacked(king.getRow(), king.getCol(), color);
+	}
+	
+	public boolean squareAttacked(int row, int col, ChessPieceColor color) {
 		for (int c = 0; c < board[0].length; c++)
 			for (int r = 0; r < board.length; r++) {
 				ChessPiece chessPiece = this.getPiece(r,c);
-				if (chessPiece != null && chessPiece.getColor() != color && chessPiece != king
-						&& Game.validMove(king.getRow(), king.getCol(), this, chessPiece))
+				if (chessPiece != null && chessPiece.getColor() != color
+						&& Game.moveType(row, col, this, chessPiece) == 1)
 					return true;
 			}
 			
