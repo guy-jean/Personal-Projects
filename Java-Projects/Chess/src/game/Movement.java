@@ -83,7 +83,7 @@ public class Movement {
 		
 		blocked = false;
 		
-		for (int r = chessPiece.getRow()+1; !blocked && r <= ChessBoard.MAXFILE; r++) {
+		for (int r = chessPiece.getRow()+1; !blocked && r < ChessBoard.MAXFILE; r++) {
 			int currCol = chessPiece.getCol();
 			if (chessBoard.getPiece(r, currCol) != null) {
 				blocked = true;
@@ -111,7 +111,7 @@ public class Movement {
 		
 		blocked = false;
 		
-		for (int c = chessPiece.getCol()+1;!blocked && c <= ChessBoard.MAXRANK; c++) {
+		for (int c = chessPiece.getCol()+1;!blocked && c < ChessBoard.MAXRANK; c++) {
 			int currRow = chessPiece.getRow();
 			if (chessBoard.getPiece(currRow, c) != null) {
 				blocked = true;
@@ -226,7 +226,7 @@ public class Movement {
 		lst.add(new int[] {row-1, col+2});
 		lst.add(new int[] {row-2, col+1});
 		
-		for(int i = 0; i < lst.size(); i++) {
+		for(int i = 0; i < lst.size()-1; i++) {
 			int[] arr = lst.get(i);
 			if(!inBounds(arr[0],arr[1]))
 				lst.remove(i);
@@ -262,7 +262,7 @@ public class Movement {
 		lst.add(new int[] {row, col+1});
 		lst.add(new int[] {row, col-1});
 		
-		for(int i = 0; i < lst.size(); i++) {
+		for(int i = 0; i < lst.size()-1; i++) {
 			int[] arr = lst.get(i);
 			if(!inBounds(arr[0],arr[1]))
 				lst.remove(i);

@@ -1,8 +1,7 @@
 package game;
 
-import java.util.ArrayList;
-
 public class ChessPiece {
+
 	public enum ChessPieceColor {
 		WHITE, BLACK
 	}
@@ -116,5 +115,33 @@ public class ChessPiece {
 	
 	public ChessPieceType getType() {
 		return this.type;
+	}
+	
+	public String toString() {
+		String pre = color == ChessPieceColor.WHITE ? "W" : "B";
+
+		switch(type)
+		{
+		   case PAWN :
+			   return pre + "P";
+		   
+		   case ROOK :
+			   return pre + "R";
+		      
+		   case BISHOP :
+			   return pre + "B";
+			
+		   case KNIGHT :
+			   return pre + "H";
+			      
+		   case QUEEN :
+			   return pre + "Q";
+		
+		   case KING :
+			   return pre + "K";
+
+		   default : 
+			   return "";
+		}
 	}
 }
