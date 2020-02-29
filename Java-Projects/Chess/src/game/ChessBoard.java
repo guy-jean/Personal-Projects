@@ -13,36 +13,36 @@ public class ChessBoard {
 		board = new ChessPiece[MAXFILE][MAXRANK];
 		
 		for (int c = 0; c < board[0].length; c++) {
-			board[1][c] = new ChessPiece(0, c, ChessPieceColor.BLACK, ChessPieceType.PAWN);
-			board[MAXFILE-2][c] = new ChessPiece(MAXFILE-1, c, ChessPieceColor.WHITE, ChessPieceType.PAWN);
+			board[1][c] = new ChessPiece(1, c, ChessPieceColor.BLACK, ChessPieceType.PAWN);
+			board[MAXFILE-2][c] = new ChessPiece(MAXFILE-2, c, ChessPieceColor.WHITE, ChessPieceType.PAWN);
 		}
 		
-		board[0][0] = new ChessPiece(1, 0, ChessPieceColor.BLACK, ChessPieceType.ROOK); 
-		board[0][MAXRANK-1] = new ChessPiece(1, MAXRANK-1, ChessPieceColor.BLACK, ChessPieceType.ROOK); 
-		board[MAXFILE-1][0] = new ChessPiece(MAXFILE-2, 0, ChessPieceColor.WHITE, ChessPieceType.ROOK); 
-		board[MAXFILE-1][MAXRANK-1] = new ChessPiece(MAXFILE-2, MAXRANK-1, ChessPieceColor.WHITE, ChessPieceType.ROOK);
+		board[0][0] = new ChessPiece(0, 0, ChessPieceColor.BLACK, ChessPieceType.ROOK); 
+		board[0][MAXRANK-1] = new ChessPiece(0, MAXRANK-1, ChessPieceColor.BLACK, ChessPieceType.ROOK); 
+		board[MAXFILE-1][0] = new ChessPiece(MAXFILE-1, 0, ChessPieceColor.WHITE, ChessPieceType.ROOK); 
+		board[MAXFILE-1][MAXRANK-1] = new ChessPiece(MAXFILE-1, MAXRANK-1, ChessPieceColor.WHITE, ChessPieceType.ROOK);
 		
-		board[0][1] = new ChessPiece(1, 1, ChessPieceColor.BLACK, ChessPieceType.KNIGHT); 
-		board[0][MAXRANK-2] = new ChessPiece(1, MAXRANK-2, ChessPieceColor.BLACK, ChessPieceType.KNIGHT); 
-		board[MAXFILE-1][1] = new ChessPiece(MAXFILE-2, 1, ChessPieceColor.WHITE, ChessPieceType.KNIGHT); 
-		board[MAXFILE-1][MAXRANK-2] = new ChessPiece(MAXFILE-2, MAXRANK-2, ChessPieceColor.WHITE, ChessPieceType.KNIGHT);
+		board[0][1] = new ChessPiece(0, 1, ChessPieceColor.BLACK, ChessPieceType.KNIGHT); 
+		board[0][MAXRANK-2] = new ChessPiece(0, MAXRANK-2, ChessPieceColor.BLACK, ChessPieceType.KNIGHT); 
+		board[MAXFILE-1][1] = new ChessPiece(MAXFILE-1, 1, ChessPieceColor.WHITE, ChessPieceType.KNIGHT); 
+		board[MAXFILE-1][MAXRANK-2] = new ChessPiece(MAXFILE-1, MAXRANK-2, ChessPieceColor.WHITE, ChessPieceType.KNIGHT);
 		
-		board[0][2] = new ChessPiece(1, 2, ChessPieceColor.BLACK, ChessPieceType.BISHOP); 
-		board[0][MAXRANK-3] = new ChessPiece(1, MAXRANK-3, ChessPieceColor.BLACK, ChessPieceType.BISHOP); 
-		board[MAXFILE-1][2] = new ChessPiece(MAXFILE-2, 2, ChessPieceColor.WHITE, ChessPieceType.BISHOP); 
-		board[MAXFILE-1][MAXRANK-3] = new ChessPiece(MAXFILE-2, MAXRANK-3, ChessPieceColor.WHITE, ChessPieceType.BISHOP);
+		board[0][2] = new ChessPiece(0, 2, ChessPieceColor.BLACK, ChessPieceType.BISHOP); 
+		board[0][MAXRANK-3] = new ChessPiece(0, MAXRANK-3, ChessPieceColor.BLACK, ChessPieceType.BISHOP); 
+		board[MAXFILE-1][2] = new ChessPiece(MAXFILE-1, 2, ChessPieceColor.WHITE, ChessPieceType.BISHOP); 
+		board[MAXFILE-1][MAXRANK-3] = new ChessPiece(MAXFILE-1, MAXRANK-3, ChessPieceColor.WHITE, ChessPieceType.BISHOP);
 		
-		board[0][3] = new ChessPiece(1, 3, ChessPieceColor.BLACK, ChessPieceType.QUEEN); 
-		board[0][MAXRANK-4] = new ChessPiece(1, MAXRANK-4, ChessPieceColor.BLACK, ChessPieceType.KING); 
-		board[MAXFILE-1][3] = new ChessPiece(MAXFILE-2, 3, ChessPieceColor.WHITE, ChessPieceType.QUEEN); 
-		board[MAXFILE-1][MAXRANK-4] = new ChessPiece(MAXFILE-2, MAXRANK-4, ChessPieceColor.WHITE, ChessPieceType.KING);
+		board[0][3] = new ChessPiece(0, 3, ChessPieceColor.BLACK, ChessPieceType.QUEEN); 
+		board[0][MAXRANK-4] = new ChessPiece(0, MAXRANK-4, ChessPieceColor.BLACK, ChessPieceType.KING); 
+		board[MAXFILE-1][3] = new ChessPiece(MAXFILE-1, 3, ChessPieceColor.WHITE, ChessPieceType.QUEEN); 
+		board[MAXFILE-1][MAXRANK-4] = new ChessPiece(MAXFILE-1, MAXRANK-4, ChessPieceColor.WHITE, ChessPieceType.KING);
 	}
 	
 	public ChessBoard(ChessBoard cb) {
 		board = new ChessPiece[MAXFILE][MAXRANK];
 		
-		for (int c = 0; c < board[0].length; c++)
-			for (int r = 0; r < board.length; r++) {
+		for (int r = 0; r < board.length; r++)
+			for (int c = 0; c < board[0].length; c++) {
 				if (cb.getPiece(r, c) == null)
 					this.board[r][c] = null;
 				else
@@ -52,6 +52,8 @@ public class ChessBoard {
 	
 	
 	public ChessPiece getPiece(int row, int col) {
+		if (!Movement.inBounds(row,col))
+			return null;
 		return board[row][col];
 	}
 	
@@ -69,8 +71,8 @@ public class ChessBoard {
 	}
 	
 	public boolean squareAttacked(int row, int col, ChessPieceColor color) {
-		for (int c = 0; c < board[0].length; c++)
-			for (int r = 0; r < board.length; r++) {
+		for (int r = 0; r < board.length; r++)
+			for (int c = 0; c < board[0].length; c++) {
 				ChessPiece chessPiece = this.getPiece(r,c);
 				if (chessPiece != null && chessPiece.getColor() != color
 						&& Game.moveType(row, col, this, chessPiece) == 1)
@@ -81,8 +83,8 @@ public class ChessBoard {
 	}
 
 	private ChessPiece findKing(ChessPieceColor color) {
-		for (int c = 0; c < board[0].length; c++)
-			for (int r = 0; r < board.length; r++) {
+		for (int r = 0; r < board.length; r++)
+			for (int c = 0; c < board[0].length; c++) {
 				ChessPiece piece = this.getPiece(r,c);
 				if (piece != null && piece.getColor() == color && piece.getType() == ChessPieceType.KING)
 					return piece;

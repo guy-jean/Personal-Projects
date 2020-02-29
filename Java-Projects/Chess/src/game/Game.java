@@ -104,7 +104,7 @@ public class Game {
 	public static int moveType(int targetRow, int targetCol, ChessBoard chessBoard, ChessPiece chessPiece) {
 		int moveType = 0;
 		ArrayList<int[]> lst = getPotentialMoves(chessBoard, chessPiece);
-		if (lst.contains(new int[] {targetRow, targetCol})) {
+		if (containsCoors(lst, targetRow, targetCol)) {
 			moveType = 1;
 			boolean isEnPassant = chessPiece.getType() == ChessPieceType.PAWN && chessBoard.enPassantPawn != null &&
 					chessBoard.enPassantPawn.getColor() != chessPiece.getColor() && chessBoard.enPassantCoors[0] == targetRow &&
@@ -119,6 +119,14 @@ public class Game {
 
 		}
 		return moveType;
+	}
+	
+	public static boolean containsCoors(ArrayList<int[]> lst, int row, int col) {
+		for (int[] arr : lst) 
+			if (arr[0] == row && arr[1] == col)
+				return true;
+
+		return false;
 	}
 	
 	public static ArrayList<int[]> getPotentialMoves(ChessBoard chessBoard, ChessPiece chessPiece) {
@@ -154,7 +162,7 @@ public class Game {
 		for (int c = 0; c < ChessBoard.MAXRANK; c++)
 			for (int r = 0; r < ChessBoard.MAXFILE; r++) {
 				ChessPiece chessPiece = chessBoard.getPiece(r, c);
-				if (chessPiece.getColor() == color && allValidMoves(chessBoard,chessPiece).isEmpty())
+				if (chessPiece != null && chessPiece.getColor() == color && allValidMoves(chessBoard,chessPiece).isEmpty())
 					return false;
 			}
 		
@@ -163,7 +171,7 @@ public class Game {
 	
 	public ArrayList<int[]> allValidMoves(ChessBoard chessBoard, ChessPiece chessPiece) {
 		ArrayList<int[]> lst = getPotentialMoves(chessBoard, chessPiece);
-		
+		System.out.println(chessPiece.getType());
 		for (int i = 0; i < lst.size()-1; i++) {
 			ChessBoard tempBoard = move(lst.get(i)[0], lst.get(i)[1], chessPiece.getRow(), chessPiece.getCol(), chessBoard);
 			if (tempBoard == null)

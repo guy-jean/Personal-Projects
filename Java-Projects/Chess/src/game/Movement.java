@@ -8,9 +8,29 @@ import game.ChessPiece.ChessPieceType;
 public class Movement {
 
 	public static ArrayList<int[]> getPawnMoves(ChessBoard chessBoard, ChessPiece chessPiece) {
+		//System.out.println("getPawnMoves");
 		ArrayList<int[]> lst = new ArrayList<int[]>();
 
-		if (chessPiece.getColor() == ChessPieceColor.WHITE && chessPiece.getRow() < ChessBoard.MAXFILE) {
+		if (chessPiece.getColor() == ChessPieceColor.WHITE && chessPiece.getRow() < ChessBoard.MAXFILE - 1) {
+			//System.out.println("getPawnMovesW");
+			ChessPiece rDiag = chessBoard.getPiece(chessPiece.getRow()-1,chessPiece.getCol()+1);
+			if (rDiag != null && rDiag.getColor() != chessPiece.getColor())
+				lst.add(new int[]{chessPiece.getRow()-1,chessPiece.getCol()+1});
+			
+			ChessPiece lDiag = chessBoard.getPiece(chessPiece.getRow()-1,chessPiece.getCol()-1);
+			if (lDiag != null && lDiag.getColor() != chessPiece.getColor())
+				lst.add(new int[]{chessPiece.getRow()-1,chessPiece.getCol()-1});
+			
+			if (chessBoard.getPiece(chessPiece.getRow()-1, chessPiece.getCol()) == null) {
+				lst.add(new int[] {chessPiece.getRow()-1,chessPiece.getCol()});
+				//System.out.println("getPawnMovesw2");
+				boolean moveTwo = chessPiece.getMoveCount() == 0 && chessBoard.getPiece(chessPiece.getRow()-2, chessPiece.getCol()) == null;
+				if (moveTwo)
+					lst.add(new int[] {chessPiece.getRow()-2,chessPiece.getCol()});
+			}
+		}
+		else if (chessPiece.getColor() == ChessPieceColor.BLACK && chessPiece.getRow() > 0){ 
+			//System.out.println("getPawnMovesB");
 			ChessPiece rDiag = chessBoard.getPiece(chessPiece.getRow()+1,chessPiece.getCol()+1);
 			if (rDiag != null && rDiag.getColor() != chessPiece.getColor())
 				lst.add(new int[]{chessPiece.getRow()+1,chessPiece.getCol()+1});
@@ -21,29 +41,13 @@ public class Movement {
 			
 			if (chessBoard.getPiece(chessPiece.getRow()+1, chessPiece.getCol()) == null) {
 				lst.add(new int[] {chessPiece.getRow()+1,chessPiece.getCol()});
-				
-				boolean moveTwo = chessPiece.getMoveCount() == 0 && chessBoard.getPiece(chessPiece.getRow()+2, chessPiece.getCol()) == null;
-				if (moveTwo)
-					lst.add(new int[] {chessPiece.getRow()+2,chessPiece.getCol()});
-			}
-		}
-		else if (chessPiece.getRow() > 0){ 
-			ChessPiece rDiag = chessBoard.getPiece(chessPiece.getRow()-1,chessPiece.getCol()+1);
-			if (rDiag != null && rDiag.getColor() != chessPiece.getColor())
-				lst.add(new int[]{chessPiece.getRow()-1,chessPiece.getCol()+1});
-			
-			ChessPiece lDiag = chessBoard.getPiece(chessPiece.getRow()-1,chessPiece.getCol()-1);
-			if (lDiag != null && lDiag.getColor() != chessPiece.getColor())
-				lst.add(new int[]{chessPiece.getRow()-1,chessPiece.getCol()-1});
-			
-			if (chessBoard.getPiece(chessPiece.getRow()-1, chessPiece.getCol()) == null) {
-			lst.add(new int[] {chessPiece.getRow()-1,chessPiece.getCol()});
-			
-			boolean moveTwo = chessPiece.getMoveCount() == 0 && chessBoard.getPiece(chessPiece.getRow()-2, chessPiece.getCol()) == null;
+				//System.out.println("getPawnMovesb2");
+			boolean moveTwo = chessPiece.getMoveCount() == 0 && chessBoard.getPiece(chessPiece.getRow()+2, chessPiece.getCol()) == null;
 			
 			if (moveTwo)
-				lst.add(new int[] {chessPiece.getRow()-2,chessPiece.getCol()});
+				lst.add(new int[] {chessPiece.getRow()+2,chessPiece.getCol()});
 			}
+		
 		}
 		
 		boolean enPassantCapture = chessBoard.enPassantPawn != null && chessBoard.enPassantPawn.getColor() != chessPiece.getColor();
@@ -51,17 +55,18 @@ public class Movement {
 				
 		if (enPassantCapture) {
 			if (chessPiece.getColor() == ChessPieceColor.WHITE) { 
-				if (chessBoard.enPassantCoors[0] == chessPiece.getRow()+1 && 
-						(chessBoard.enPassantCoors[1] == chessPiece.getCol()+1 || chessBoard.enPassantCoors[1] == chessPiece.getCol()-1))
-					lst.add(chessBoard.enPassantCoors);
-			}
-			else {
 				if (chessBoard.enPassantCoors[0] == chessPiece.getRow()-1 && 
 						(chessBoard.enPassantCoors[1] == chessPiece.getCol()+1 || chessBoard.enPassantCoors[1] == chessPiece.getCol()-1))
 					lst.add(chessBoard.enPassantCoors);
 			}
+			else {
+				if (chessBoard.enPassantCoors[0] == chessPiece.getRow()+1 && 
+						(chessBoard.enPassantCoors[1] == chessPiece.getCol()+1 || chessBoard.enPassantCoors[1] == chessPiece.getCol()-1))
+					lst.add(chessBoard.enPassantCoors);
+			}
 		}
-		
+		//System.out.println(chessPiece.getColor());
+		//System.out.println(lst.isEmpty());
 		return lst;
 	}
 
@@ -226,16 +231,18 @@ public class Movement {
 		lst.add(new int[] {row-1, col+2});
 		lst.add(new int[] {row-2, col+1});
 		
-		for(int i = 0; i < lst.size()-1; i++) {
+		ArrayList<int[]> lst2 = new ArrayList<int[]>();
+		for(int i = 0; i < lst.size(); i++) {
 			int[] arr = lst.get(i);
-			if(!inBounds(arr[0],arr[1]))
-				lst.remove(i);
-			else if (chessBoard.getPiece(arr[0], arr[1]) != null && 
-					chessBoard.getPiece(arr[0], arr[1]).getColor() == chessPiece.getColor())
-				lst.remove(i);
+			boolean valid = inBounds(arr[0],arr[1]) && (chessBoard.getPiece(arr[0], arr[1]) == null || 
+					chessBoard.getPiece(arr[0], arr[1]).getColor() != chessPiece.getColor());
+			if(valid)
+				lst2.add(arr);
 		}
 		
-		return lst;
+		for (int[] arr : lst2)
+			System.out.println(arr[0] + "," + arr[1]);
+		return lst2;
 	}
 
 	public static ArrayList<int[]> getQueenMoves(ChessBoard chessBoard, ChessPiece chessPiece) {
@@ -262,21 +269,21 @@ public class Movement {
 		lst.add(new int[] {row, col+1});
 		lst.add(new int[] {row, col-1});
 		
-		for(int i = 0; i < lst.size()-1; i++) {
+		ArrayList<int[]> lst2 = new ArrayList<int[]>();
+		for(int i = 0; i < lst.size(); i++) {
 			int[] arr = lst.get(i);
-			if(!inBounds(arr[0],arr[1]))
-				lst.remove(i);
-			else if (chessBoard.getPiece(arr[0], arr[1]) != null && 
-					chessBoard.getPiece(arr[0], arr[1]).getColor() == chessPiece.getColor())
-				lst.remove(i);
+			boolean valid = inBounds(arr[0],arr[1]) && (chessBoard.getPiece(arr[0], arr[1]) == null || 
+					chessBoard.getPiece(arr[0], arr[1]).getColor() != chessPiece.getColor());
+			if(valid)
+				lst2.add(arr);
 		}
 		
 		if (chessPiece.getMoveCount() == 0) {
-			castle(chessBoard, chessPiece, lst);
+			castle(chessBoard, chessPiece, lst2);
 		}
 			
 			
-		return lst;
+		return lst2;
 	}
 	
 	private static void castle(ChessBoard chessBoard, ChessPiece chessPiece, ArrayList<int[]> lst) {
@@ -298,7 +305,7 @@ public class Movement {
 			lst.add(new int[]{row,chessPiece.getCol()+2});
 	}
 	
-	private static boolean inBounds(int row, int col) {
+	public static boolean inBounds(int row, int col) {
 		return row >= 0 && row < ChessBoard.MAXFILE && 
 				col >= 0 && col < ChessBoard.MAXRANK;
 	}
