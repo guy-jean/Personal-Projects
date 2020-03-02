@@ -12,6 +12,7 @@ public class Square extends JComponent {
 	public int size;
 	public int x;
 	public int y;
+	public boolean selected = false;
 	public Square(ChessPieceColor color, int x, int y, int size) {
 		this.img = null;
 		this.x = x;
@@ -29,8 +30,11 @@ public class Square extends JComponent {
 	
 	
 	public void drawSquare(Graphics g) {  
-		
-		if (color == ChessPieceColor.BLACK) {
+		if (selected == true) {
+			g.setColor(Color.red);  
+        	g.fillRect(x, y, size, size);
+		}
+		else if (color == ChessPieceColor.BLACK) {
 			g.setColor(Color.gray);  
         	g.fillRect(x, y, size, size);
 		}

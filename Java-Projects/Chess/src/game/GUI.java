@@ -9,6 +9,8 @@ import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+
 import game.ChessPiece.ChessPieceColor;
 import game.ChessPiece.ChessPieceType;
 
@@ -22,23 +24,45 @@ public class GUI {
 	int sqSize;
 	Square[][] squares;
 	Image[] pieces;
-	String currTurn;
+	String currCoor;
+	Square selectedSquare;
+	JLabel turnLabel;
+	JLabel dirLabel;
+	JLabel checkLabel;
+	
 	static final String[] IMAGEFILENAMES = new String[] {
 			"wpawn.png", "wrook.png", "wknight.png", "wbishop.png", "wqueen.png", "wking.png",
 			"bpawn.png", "brook.png", "bknight.png", "bbishop.png", "bqueen.png", "bking.png",
 	};
 	
-	public GUI(int size, ChessBoard chessBoard, Game game) {  
+	public GUI(int size, Game game) {  
 		this.size = size;
-		this.chessBoard = chessBoard;
+		this.game = game;
+		this.chessBoard = game.getCurrBoard();
 		this.pieces = loadPieces();
 		frame = new JFrame("Chess");   
 		this.boardSize = (3 * size) /4;
 		this.borderSize = (size - boardSize) / 2;
 		this.sqSize = boardSize/8;
-		currTurn = "";
-		
+		currCoor = "";
 		squares = new Square[ChessBoard.MAXRANK][ChessBoard.MAXFILE];
+		
+		turnLabel = new JLabel("WHITE's turn.");
+		turnLabel.setBounds((size / 2) - (size/8), borderSize/8, size/4, borderSize/4);
+		turnLabel.setHorizontalAlignment(JLabel.CENTER);
+		
+		dirLabel = new JLabel();
+		dirLabel.setBounds((size / 2) - (size/8), borderSize/3, size/4, borderSize/4);
+		dirLabel.setHorizontalAlignment(JLabel.CENTER);
+		
+		checkLabel = new JLabel();
+		checkLabel.setBounds((size / 2) - (size/8), size - borderSize, size/4, borderSize/4);
+		checkLabel.setHorizontalAlignment(JLabel.CENTER);
+		
+		frame.add(turnLabel);
+		frame.add(dirLabel);
+		frame.add(checkLabel);
+		
 		for (int r = 0; r < ChessBoard.MAXRANK; r++) {
 	    	for (int c = 0; c < ChessBoard.MAXFILE; c++) {
 	    		Image img = getImage(chessBoard.getPiece(r, c));
@@ -48,7 +72,7 @@ public class GUI {
 	    		int y = (r * sqSize) + borderSize;
 	    		squares[r][c] = new Square(color, img, x, y, sqSize);
 	    		
-	    		JButton button = new JButton(r + "" + c);
+	    		JButton button = new JButton();
 	    		button.setActionCommand(r + "" + c);
 	    		button.setBounds(x, y, sqSize, sqSize);
 	    		button.setOpaque(false);
@@ -59,12 +83,27 @@ public class GUI {
 	    			  public void actionPerformed(ActionEvent e) { 
 	    				  	JButton button = (JButton) e.getSource();
 	    				    String command = button.getActionCommand();
-	    				  	System.out.println(command);
-	    				    currTurn += command;
-	    				    System.out.println(currTurn);
-	    				    if (currTurn.length() > 2) {
-	    				    	game.takeTurn(currTurn);
-	    				    	currTurn = "";
+
+
+	
+	    				    if (currCoor.length() > 0) {
+	    				    	selectedSquare.selected = false;
+	    				    	game.takeTurn(currCoor + command);
+	    				    	currCoor = "";
+	    				    	update();
+	    				    	return;
+	    				    }
+	    				    
+	    				    chessBoard = game.getCurrBoard();
+	    				    ChessPiece piece = chessBoard.getPiece(Character.getNumericValue(command.charAt(0)), 
+	    				    		Character.getNumericValue(command.charAt(1)));
+	    				    if (piece != null && piece.getColor() == game.getTurnColor()){
+	    				    	currCoor = command;
+	    				    	selectedSquare = squares[Character.getNumericValue(currCoor.charAt(0))][Character.getNumericValue(currCoor.charAt(1))];
+	    				    	selectedSquare.selected = true;
+	    				    }
+	    				    else {
+	    				    	dirLabel.setText("Invalid Selection");
 	    				    }
 	    			  } 
 	    		} );
@@ -141,8 +180,8 @@ public class GUI {
 		return pieces;
 	}
 	
-	public void update(ChessBoard chessBoard) {
-		this.chessBoard = chessBoard;
+	public void update() {
+		this.chessBoard = game.getCurrBoard();
 		for (int r = 0; r < ChessBoard.MAXRANK; r++) {
 	    	for (int c = 0; c < ChessBoard.MAXFILE; c++) {
 	    		Square square = squares[r][c];

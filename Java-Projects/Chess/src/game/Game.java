@@ -212,22 +212,35 @@ public class Game {
 		int currCol = Character.getNumericValue(str.charAt(1));
 		int targetRow = Character.getNumericValue(str.charAt(2));
 		int targetCol = Character.getNumericValue(str.charAt(3));
-		System.out.println(currRow);
-		System.out.println(currCol);
-		System.out.println(targetRow);
-		System.out.println(targetCol);
+		//System.out.println(currRow);
+		//System.out.println(currCol);
+		//System.out.println(targetRow);
+		//System.out.println(targetCol);
 		if (checkTurn(targetRow, targetCol, currRow, currCol)) {
 			System.out.println(toString());
-			gui.update(boardStates.get(boardStates.size()-1));
+			gui.turnLabel.setText(getTurnColor() + "'s turn");
+			if (getCurrBoard().inCheck(getTurnColor())) {
+				gui.checkLabel.setText(getTurnColor() + "'s in check\n");
+			}
+			else {
+				gui.checkLabel.setText("");
+			}
+			gui.dirLabel.setText("");
 			finished = checkMate(getTurnColor());
+			
+			if (finished) {
+				moveNum++;
+				gui.checkLabel.setText(getTurnColor() + "wins!");
+			}
+			
 		}
 		else {
-			
+			gui.dirLabel.setText("Invalid Move");
 		}
 	}
 	
 	public void play() {
-		this. gui = new GUI(600, boardStates.get(boardStates.size()-1), this); 
+		this. gui = new GUI(600, this); 
 		this.finished = false;
 		/*
 		while (!finished) {
@@ -274,5 +287,9 @@ public class Game {
 			str.append(getTurnColor() + "'s in check.\n");
 		
 		return str.toString();
+	}
+	
+	public ChessBoard getCurrBoard() {
+		return boardStates.get(boardStates.size()-1);
 	}
 }
