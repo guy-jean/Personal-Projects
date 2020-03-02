@@ -1,7 +1,6 @@
 package game;
 
 import java.awt.Graphics;
-
 import javax.swing.JPanel;
 
 @SuppressWarnings("serial")

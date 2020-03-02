@@ -9,6 +9,8 @@ import game.ChessPiece.ChessPieceType;
 public class Game {
 	ArrayList<ChessBoard> boardStates;
 	int moveNum;
+	GUI gui;
+	boolean finished;
 	//Player whitePlayer;
 	//Player blackPlayer;
 	
@@ -171,7 +173,7 @@ public class Game {
 	
 	public ArrayList<int[]> allValidMoves(ChessBoard chessBoard, ChessPiece chessPiece) {
 		ArrayList<int[]> lst = getPotentialMoves(chessBoard, chessPiece);
-		System.out.println(chessPiece.getType());
+		//System.out.println(chessPiece.getType());
 		for (int i = 0; i < lst.size()-1; i++) {
 			ChessBoard tempBoard = move(lst.get(i)[0], lst.get(i)[1], chessPiece.getRow(), chessPiece.getCol(), chessBoard);
 			if (tempBoard == null)
@@ -186,7 +188,7 @@ public class Game {
 		return turnColor;
 	}
 	
-	public boolean turn(int targetRow, int targetCol, int currRow, int currCol) {
+	public boolean checkTurn(int targetRow, int targetCol, int currRow, int currCol) {
 		ChessBoard currBoard = boardStates.get(boardStates.size()-1);
 		
 		if (currBoard.getPiece(currRow,currCol) == null || currBoard.getPiece(currRow,currCol).getColor() != getTurnColor())
@@ -202,12 +204,35 @@ public class Game {
 		return true;
 	}
 	
+	public void takeTurn(String str) {
+		System.out.println("imhere " + str);
+		if (finished)
+			return;
+		int currRow = Character.getNumericValue(str.charAt(0));
+		int currCol = Character.getNumericValue(str.charAt(1));
+		int targetRow = Character.getNumericValue(str.charAt(2));
+		int targetCol = Character.getNumericValue(str.charAt(3));
+		System.out.println(currRow);
+		System.out.println(currCol);
+		System.out.println(targetRow);
+		System.out.println(targetCol);
+		if (checkTurn(targetRow, targetCol, currRow, currCol)) {
+			System.out.println(toString());
+			gui.update(boardStates.get(boardStates.size()-1));
+			finished = checkMate(getTurnColor());
+		}
+		else {
+			
+		}
+	}
+	
 	public void play() {
-		boolean finished = false;
-		Scanner scan = new Scanner(System.in);
-		
+		this. gui = new GUI(600, boardStates.get(boardStates.size()-1), this); 
+		this.finished = false;
+		/*
 		while (!finished) {
 			System.out.println(toString());
+			
 			System.out.println("Enter Piece Row: ");
 			int row = scan.nextInt();
 			System.out.println("Enter Piece Col: ");
@@ -217,7 +242,8 @@ public class Game {
 			System.out.println("Enter Target Col: ");
 			int targetCol = scan.nextInt();
 			
-			while (!turn(targetRow, targetCol, row, col)) {
+			while (!checkTurn(targetRow, targetCol, row, col)) {
+				
 				System.out.println("Invalid move, try again");
 				System.out.println(toString());
 				System.out.println("Enter Piece Row: ");
@@ -228,12 +254,15 @@ public class Game {
 				targetRow = scan.nextInt();
 				System.out.println("Enter Target Col: ");
 				targetCol = scan.nextInt();
+				
 			}
+			gui.update(boardStates.get(boardStates.size()-1));
 			finished = checkMate(getTurnColor());
 		}
-		scan.close();
+
 		moveNum++;
 		System.out.println(getTurnColor() + " wins");
+		*/
 	}
 	
 	public String toString() {

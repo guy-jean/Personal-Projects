@@ -2,14 +2,12 @@ package game;
 import java.awt.Color;  
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Toolkit;
-
 import javax.swing.JComponent;
-
 import game.ChessPiece.ChessPieceColor;  
 
-public class Square extends JComponent{
-	public String img;
+@SuppressWarnings("serial")
+public class Square extends JComponent {
+	public Image img;
 	public ChessPieceColor color;
 	public int size;
 	public int x;
@@ -21,7 +19,7 @@ public class Square extends JComponent{
 		this.size = size;
 	}
 	
-	public Square(ChessPieceColor color, String img, int x, int y, int size) {
+	public Square(ChessPieceColor color, Image img, int x, int y, int size) {
 		this.color = color;
 		this.img = img;
 		this.x = x;
@@ -42,9 +40,20 @@ public class Square extends JComponent{
 		}
 		
 		if (img != null) {
-			Toolkit t = Toolkit.getDefaultToolkit();  
-			Image i = t.getImage(img);  
-			g.drawImage(i, x, y,this);  
+			//String workingDirectory = System.getProperty("user.dir");
+			//File f = new File(img);  
+			
+			//Image i = new ImageIcon(this.getClass().getResource(img)).getImage();
+			//g.drawImage(i, x, y,this);
+			//Image i;
+			//Image i = new ImageIcon(this.getClass().getResource(img)).getImage();
+			//g.drawImage(i, x, y,this); 
+			Image image = img.getScaledInstance(size, size, Image.SCALE_DEFAULT);
+			g.drawImage(image, x, y,this);
 		}
-      }
+	}
+	
+	public void setImage(Image img) {
+		this.img = img;
+	}
 }

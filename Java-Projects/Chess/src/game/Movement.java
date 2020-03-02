@@ -240,8 +240,8 @@ public class Movement {
 				lst2.add(arr);
 		}
 		
-		for (int[] arr : lst2)
-			System.out.println(arr[0] + "," + arr[1]);
+		//for (int[] arr : lst2)
+			//System.out.println(arr[0] + "," + arr[1]);
 		return lst2;
 	}
 

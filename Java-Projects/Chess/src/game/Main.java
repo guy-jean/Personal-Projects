@@ -2,8 +2,7 @@ package game;
 
 public class Main {
 
-	public static void main(String[] args) {
-		new GUI(400);  
+	public static void main(String[] args) { 
 		Game game = new Game();
 		game.play();
 		
