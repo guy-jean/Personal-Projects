@@ -37,8 +37,8 @@ public class Game {
 			
 			if (nextPiece.getType() == ChessPieceType.PAWN && Math.abs(targetRow-currRow) > 1) {
 				nextBoard.enPassantPawn = nextPiece;
-				nextBoard.enPassantCoors = nextPiece.getColor() == ChessPieceColor.WHITE ? new int[] {targetRow-1, targetCol} :
-					new int[] {targetRow+1, targetCol};
+				nextBoard.enPassantCoors = nextPiece.getColor() == ChessPieceColor.WHITE ? new int[] {targetRow+1, targetCol} :
+					new int[] {targetRow-1, targetCol};
 			}
 			else {
 				nextBoard.enPassantPawn = null;
@@ -47,12 +47,13 @@ public class Game {
 		}
 			
 		else if (moveType == 2) {
-			castleKing(targetRow, targetCol, nextBoard, nextPiece);
+			enPassantCapture(targetRow, targetCol, nextBoard, nextPiece);
 			if (nextBoard.inCheck(turnColor)) 
 				return null;
 		}
 		else if (moveType == 3) {
-			enPassantCapture(targetRow, targetCol, nextBoard, nextPiece);
+			castleKing(targetRow, targetCol, nextBoard, nextPiece);
+			
 			if (nextBoard.inCheck(turnColor)) 
 				return null;
 		}
@@ -160,11 +161,11 @@ public class Game {
 	}
 	
 	public boolean checkMate(ChessPieceColor color) {
-		ChessBoard chessBoard = boardStates.get(boardStates.size()-1);
+		ChessBoard chessBoard = getCurrBoard();
 		for (int c = 0; c < ChessBoard.MAXRANK; c++)
 			for (int r = 0; r < ChessBoard.MAXFILE; r++) {
 				ChessPiece chessPiece = chessBoard.getPiece(r, c);
-				if (chessPiece != null && chessPiece.getColor() == color && allValidMoves(chessBoard,chessPiece).isEmpty())
+				if (chessPiece != null && chessPiece.getColor() == color && !allValidMoves(chessBoard,chessPiece).isEmpty())
 					return false;
 			}
 		
@@ -230,7 +231,7 @@ public class Game {
 			
 			if (finished) {
 				moveNum++;
-				gui.checkLabel.setText(getTurnColor() + "wins!");
+				gui.checkLabel.setText(getTurnColor() + " wins!");
 			}
 			
 		}

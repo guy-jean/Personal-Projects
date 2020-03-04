@@ -48,6 +48,11 @@ public class ChessBoard {
 				else
 					this.board[r][c] = new ChessPiece(cb.getPiece(r, c));
 			}
+		
+		if (cb.enPassantPawn != null) {
+		this.enPassantPawn = this.board[cb.enPassantPawn.getRow()][cb.enPassantPawn.getCol()];
+		this.enPassantCoors = cb.enPassantCoors;
+		}
 	}
 	
 	
